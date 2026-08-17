@@ -31,7 +31,6 @@ class getcursor:
 
 def initialize_db():
     cursor = Database().connection.cursor()
-    # query =
     cursor.executescript("""
     pragma foreign_keys = on;
     create table if not exists hotel(
@@ -73,4 +72,3 @@ def initialize_db():
     cursor.execute("insert or ignore into user values(1, 'ADMIN', 9165860333)")
     admin_password_hash = hashlib.sha256("Asdf1234!@".encode()).hexdigest()
     cursor.execute("insert or ignore into auth values(1, ?, 'admin')", (admin_password_hash,))
-

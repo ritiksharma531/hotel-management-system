@@ -46,10 +46,12 @@ class RoomService:
             if discount:
                 print(f'You got discount of {discount}%')
             total_price = room.price*(datetime.strptime(check_out_date, '%d-%m-%Y').date() - date.today()).days
+            if total_price == 0:
+                total_price = room.price
             discounted_price = total_price - (total_price * discount / 100)
             print(f'Total price is {discounted_price}')
             res = input('Enter y to pay: ')
-            if res != 'y':
+            if res.lower() != 'y':
                 self.logger.info(f"{user.name} cancelled the payment")
                 raise PaymentCancelledError
             self.DB.add_item(queries.BOOK_ROOM, room.room_id)
@@ -94,7 +96,11 @@ class RoomService:
                 self.logger.info(f"{user.name} tried to check out but no booking found")
                 raise RoomNotBookedError
 
-            if booking.status in ('checked_in', 'booked'):
+            if booking.status == 'booked':
+                self.logger.info(f"{user.name} tried to check out but never checked in")
+                return "Can't check out, you never checked in"
+
+            if booking.status == 'checked_in':
                 self.DB.update_item(queries.CHECK_OUT_BOOKING, date.today(), user.uid, room_id)
                 self.DB.update_item(queries.UPDATE_ROOM_COMPLETED, room_id)
 

@@ -13,6 +13,7 @@ class AuthController:
             mobile = validate_input('Enter your mobile: ', lambda mobile: mobile.isdigit() and len(mobile) == 10, "Mobile must be 10 digits, try again")
             password = validate_password('Enter password: ', password_regex, 'Password length must be between 8 and 30 and password must contain at least one uppercase letter, one lowercase letter, one number between 0 and 9 and one special character out of !, @, #, $, %, ^, & and *')
             self.auth_service.register_user(mobile, password, full_name, 'user')
+            print('Registered Successfully')
         except UserExistsError:
             print('User already exists')
 
@@ -24,6 +25,7 @@ class AuthController:
             if isinstance(result, str):
                 print(result)
             else:
+                print('Logged in successfully')
                 user = result
                 return user
 

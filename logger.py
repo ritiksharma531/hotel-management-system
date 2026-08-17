@@ -1,7 +1,7 @@
 import logging
 
 logging.basicConfig(
-    format='%(asctime)s | %(levelname)-8s | %(name)-8s | %(message)s' ,
+    format='%(asctime)s | %(levelname)-8s | %(name)-28s | %(message)s' ,
     level=logging.DEBUG,
     filename='logs.txt'
 )

@@ -44,7 +44,7 @@ class AuthService:
             if stored_password != hashed_password:
                 self.logger.info(f"Tried to login user with mobile {mobile}, but wrong password")
                 raise IncorrectPasswordError
-            print('Logged in successfully')
+            # return 'Logged in successfully'
             self.logger.info(f"Logged in user {user.name}")
             return user
 
