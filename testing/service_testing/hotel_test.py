@@ -9,29 +9,29 @@ class Testing(TestCase):
     @patch('services.hotel_service.DB')
     def test_existing_add_hotel(self, mocked_DB):
         hotel_service = HotelService()
-        mocked_DB.return_value.get_item.return_value = ('h1', 4)
+        mocked_DB.get_item.return_value = ('h1', 4)
         with self.assertRaises(HotelExistError):
             hotel_service.add_hotel('h1', 5)
 
     @patch('services.hotel_service.DB')
     def test_add_hotel(self, mocked_DB):
         hotel_service = HotelService()
-        mocked_DB.return_value.get_item.return_value = None
+        mocked_DB.get_item.return_value = None
         result = hotel_service.add_hotel('h2', 4)
-        mocked_DB.return_value.add_item.assert_called_once()
+        mocked_DB.add_item.assert_called_once()
         self.assertEqual(result, None)
 
     @patch('services.hotel_service.DB')
     def test_get_hotels_not_exist(self, mocked_DB):
         hotel_service = HotelService()
-        mocked_DB.return_value.get_items.return_value = None
+        mocked_DB.get_items.return_value = None
         with self.assertRaises(NoHotelFoundError):
             hotel_service.get_all_hotels()
 
     @patch('services.hotel_service.DB')
     def test_get_hotels(self, mocked_DB):
         hotel_service = HotelService()
-        mocked_DB.return_value.get_items.return_value = [(1, 'h1', 2)]
+        mocked_DB.get_items.return_value = [(1, 'h1', 2)]
         result = hotel_service.get_all_hotels()
         self.assertEqual(result[0].hid, 1)
         self.assertEqual(result[0].name, 'h1')
@@ -40,8 +40,8 @@ class Testing(TestCase):
     @patch('services.hotel_service.DB')
     def test_get_rooms_available(self, mocked_DB):
         hotel_service = HotelService()
-        mocked_DB.return_value.get_item.side_effect = [None, (1, 'h1', 4), (1, 'h2', 4)]
-        mocked_DB.return_value.get_items.side_effect = [[(1, 'regular', 2000, 'available', 1)], None]
+        mocked_DB.get_item.side_effect = [None, (1, 'h1', 4), (1, 'h2', 4)]
+        mocked_DB.get_items.side_effect = [[(1, 'regular', 2000, 'available', 1)], None]
         with self.assertRaises(HotelNotExistError):
             hotel_service.get_available_rooms(2)
         result = hotel_service.get_available_rooms(1)

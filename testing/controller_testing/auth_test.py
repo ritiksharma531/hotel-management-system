@@ -1,6 +1,5 @@
 from unittest import TestCase
 from unittest.mock import Mock, patch
-
 from controllers.auth_controller import AuthController
 from exceptions.exception import UserExistsError, UserNotExistError, IncorrectPasswordError
 
@@ -14,7 +13,7 @@ class Testing(TestCase):
         mocked_AuthService.return_value.register_user.return_value = 'User registered successfully'
         auth_controller.register_user()
         mocked_AuthService.return_value.register_user.assert_called_once_with(
-            9876543210, 'Pass123!', 'Ritik', 'user'
+            '9876543210', 'Pass123!', 'Ritik', 'user'
         )
 
     @patch('controllers.auth_controller.AuthService')
@@ -30,7 +29,7 @@ class Testing(TestCase):
     @patch('builtins.input', return_value='9876543210')
     def test_login_user_success(self, mocked_input, mocked_getpass, mocked_AuthService):
         auth_controller = AuthController()
-        user = Mock(uid=1, name='Ritik')
+        user = Mock(uid=1, name='Ritik', mobile = 9998887776)
         mocked_AuthService.return_value.login_user.return_value = user
         result = auth_controller.login_user('user')
         self.assertEqual(result, user)

@@ -10,7 +10,7 @@ class Testing(TestCase):
     def test_get_my_bookings_none_found(self, mocked_DB):
         booking_service = BookingService()
         user = Mock(uid = 1, name = 'Ritik')
-        mocked_DB.return_value.get_items.return_value = None
+        mocked_DB.get_items.return_value = None
         with self.assertRaises(NoBookingFound):
             booking_service.get_my_bookings(user)
 
@@ -18,7 +18,7 @@ class Testing(TestCase):
     def test_get_my_bookings_success(self, mocked_DB):
         booking_service = BookingService()
         user = Mock(uid = 1, name = 'Ritik')
-        mocked_DB.return_value.get_items.return_value = [
+        mocked_DB.get_items.return_value = [
             (1, 1, 1, '2026-08-15', '2026-08-16', '2026-08-18', 'booked')
         ]
         result = booking_service.get_my_bookings(user)
@@ -28,14 +28,14 @@ class Testing(TestCase):
     @patch('services.booking_service.DB')
     def test_get_all_bookings_none_found(self, mocked_DB):
         booking_service = BookingService()
-        mocked_DB.return_value.get_items.return_value = None
+        mocked_DB.get_items.return_value = None
         with self.assertRaises(NoBookingFound):
             booking_service.get_all_bookings()
 
     @patch('services.booking_service.DB')
     def test_get_all_bookings_success(self, mocked_DB):
         booking_service = BookingService()
-        mocked_DB.return_value.get_items.return_value = [
+        mocked_DB.get_items.return_value = [
             (1, 1, 1, '2026-08-15', '2026-08-16', '2026-08-18', 'booked'),
             (2, 2, 3, '2026-08-15', '2026-08-17', '2026-08-19', 'checked_in'),
         ]
