@@ -1,5 +1,5 @@
 import sqlite3
-
+import hashlib
 
 class Database:
     instance = None
@@ -69,7 +69,8 @@ def initialize_db():
             role text,
             constraint fk_uid foreign key(uid) references user(uid)
         );
-        insert or ignore into user values(1, 'ADMIN', 9165860333);
-        insert or ignore into auth values(1, 'Asdf1234!@', 'admin')
     """)
+    cursor.execute("insert or ignore into user values(1, 'ADMIN', 9165860333)")
+    admin_password_hash = hashlib.sha256("Asdf1234!@".encode()).hexdigest()
+    cursor.execute("insert or ignore into auth values(1, ?, 'admin')", (admin_password_hash,))
 

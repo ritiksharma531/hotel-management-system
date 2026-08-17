@@ -1,4 +1,5 @@
 import logger
+import hashlib
 from database import queries
 from database.db_functions import DB
 from exceptions.exception import UserExistsError, UserNotExistError, IncorrectPasswordError
@@ -19,7 +20,9 @@ class AuthService:
                 self.DB.add_item(queries.ADD_USER, name, mobile)
                 res = self.DB.get_item(queries.GET_USER, mobile)
                 user = User(*res)
-                self.DB.add_item(queries.ADD_AUTH, user.uid, password, 'user')
+                hashed_password = hashlib.sha256(password.encode()).hexdigest()
+                self.DB.add_item(queries.ADD_AUTH, user.uid, hashed_password, 'user')
+                print('Registered successfully, Please Login')
                 self.logger.info(f"Registered user {user.name}")
 
         except UserExistsError:
@@ -37,11 +40,11 @@ class AuthService:
             stored_password, user_role = self.DB.get_item(queries.GET_PASS, user.uid)
             if user_role != role:
                 raise UserNotExistError
-            if stored_password != password:
+            hashed_password = hashlib.sha256(password.encode()).hexdigest()
+            if stored_password != hashed_password:
                 self.logger.info(f"Tried to login user with mobile {mobile}, but wrong password")
                 raise IncorrectPasswordError
-
-            user = User(*user_res)
+            print('Logged in successfully')
             self.logger.info(f"Logged in user {user.name}")
             return user
 

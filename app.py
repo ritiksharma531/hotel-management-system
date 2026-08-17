@@ -17,12 +17,12 @@ while user_input!='4':
 
     if user_input == '1':
         authController.register_user()
-        print('Registered successfully, Please Login')
+        # print('Registered successfully, Please Login')
 
     elif user_input == '2':
         user = authController.login_user('user')
         if user:
-            print('Logged in successfully')
+            # print('Logged in successfully')
             user_menu(user)
 
     elif user_input == '3':
